@@ -1,5 +1,6 @@
 # spring-quartz-scheduler
 Quartz scheduler in spring boot
+Execute mvn spring-boot:run to run the spring boot app
 
 MySQLDb used as db to run quartz scheduler 
 
