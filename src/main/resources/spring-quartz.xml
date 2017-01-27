@@ -51,7 +51,7 @@
   	 
 	
 <!--  Pig template wires automatically to 'pigFactory'- --> 
-<hdp:pig-factory/>
+<hdp:pig-factory exec-type="LOCAL" />
 <hdp:pig-template />
 
 <!--  
