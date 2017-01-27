@@ -6,12 +6,18 @@
     xmlns:util="http://www.springframework.org/schema/util"
     xmlns:sec="http://www.springframework.org/schema/security"
     xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:hdp="http://www.springframework.org/schema/hadoop"
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
+         http://www.springframework.org/schema/hadoop http://www.springframework.org/schema/hadoop/spring-hadoop-2.1.xsd">
+         
+         <context:annotation-config/>
+    <context:component-scan base-package="com.ingestion.job" />
   
-   <bean id="uploadFileJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+   
+  	 <bean id="uploadFileJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="name" value="UploadJob"/>
         <property name="description" value=" This is a Upload file Job"/>
         <property name="group" value="UploadJobGroup"/>
@@ -36,6 +42,47 @@
     </property>
      <property name="configLocation" value="classpath:quartz.properties"/>
  
-  </bean>     
-         
+   </bean>   
+
+ 
+ 	<hdp:configuration id="hadoopConfiguration">
+  
+  	</hdp:configuration>
+  	 
+	
+<!--  Pig template wires automatically to 'pigFactory'- --> 
+<hdp:pig-factory/>
+<hdp:pig-template />
+
+<!--  
+<hdp:hbase-configuration zk-quorum="localhost" zk-port="2181"> </hdp:hbase-configuration>
+<bean id="htemplate" class="org.springframework.data.hadoop.hbase.HbaseTemplate" p:configuration-ref="hbaseConfiguration"/>
+-->
+<!-- 
+ <hdp:pig-runner id="pigRunner" run-at-startup="true">
+   <hdp:script>
+		A = LOAD 'src/main/resources/Upload.csv' USING PigStorage() AS (name:chararray, age:int);
+   </hdp:script>
+</hdp:pig-runner>
+ -->
+
+<!-- 
+<pig-factory exec-type="LOCAL" job-name="pig-script" xmlns="http://www.springframework.org/schema/hadoop">
+  
+   <script>
+     A = LOAD 'src/main/resources/Upload.csv' USING PigStorage() AS (name:chararray, age:in);
+		dump A;
+   </script>
+</pig-factory>
+-->
+<!-- 
+<hdp:pig-tasklet id="pig-script">
+<hdp:script>
+raw_data = LOAD 'customer.csv' USING PigStorage(',') AS (custno:chararray,firstname:chararray,lastname:chararray,age:int,profession:chararray);
+STORE raw_data INTO 'hbase://customers' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage('customers_data:firstname customers_data:lastname customers_data:age customers_data:profession');
+
+</hdp:script>
+</hdp:pig-tasklet>
+-->
+
 </beans>
